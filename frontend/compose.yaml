@@ -1,0 +1,20 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - VITE_API_URL
+        - VITE_API_PORT
+        - VITE_API_VERSION
+    container_name: timelogger-frontend
+    networks:
+      - timelogger
+    ports:
+      - "${VITE_APP_PORT:-3999}:3000"
+    restart: unless-stopped
+
+networks:
+  timelogger:
+    driver: bridge

@@ -1,0 +1,77 @@
+{
+  "short_name": "Time Logger",
+  "name": "Time Logger",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#FF4F28",
+  "background_color": "#eeefe9",
+  "description": "A simple time tracking app to help you log your hours and manage your projects efficiently.",
+  "icons": [
+    {
+      "src": "icons/icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+  {
+    "src": "screenshots/desktop-screenshot.jpg",
+    "sizes": "1920x1080",
+    "type": "image/jpg",
+    "form_factor": "wide",
+    "label": "Home screen showing main navigation and featured content"
+  },
+  {
+    "src": "screenshots/mobile-screenshot.jpg",
+    "sizes": "585x1266",
+    "type": "image/jpg",
+    "platform": "ios",
+    "label": "Dashboard view displaying key metrics"
+  }
+]
+}

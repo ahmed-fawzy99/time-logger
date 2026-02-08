@@ -1,0 +1,98 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: production
+        container_name: timelogger_app
+        restart: unless-stopped
+        ports:
+            - "${APP_PORT:-8000}:8000"
+        env_file: .env
+        environment:
+            DB_HOST: postgres
+            DB_PORT: 5432
+            REDIS_CLIENT: predis
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            OCTANE_SERVER: frankenphp
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        volumes:
+            - app-storage:/app/storage/app
+        networks:
+            - timelogger
+
+    #   For future use
+    #    queue-worker:
+    #        build:
+    #            context: .
+    #            dockerfile: Dockerfile
+    #            target: production
+    #        container_name: timelogger_queue
+    #        restart: unless-stopped
+    #        command: [ "php", "artisan", "queue:work", "--tries=3", "--timeout=90" ]
+    #        env_file: .env
+    #        environment:
+    #            DB_HOST: postgres
+    #            DB_PORT: 5432
+    #            REDIS_CLIENT: predis
+    #            REDIS_HOST: redis
+    #            REDIS_PORT: 6379
+    #        depends_on:
+    #            postgres:
+    #                condition: service_healthy
+    #            redis:
+    #                condition: service_healthy
+    #        networks:
+    #            - timelogger
+
+    postgres:
+        image: postgres:18.1-alpine
+        container_name: timelogger_pgsql
+        restart: always
+        env_file: .env
+        environment:
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_DATABASE}
+        ports:
+            - "${DB_PORT:-5434}:5432"
+        volumes:
+            - timelogger-pgsql-data:/var/lib/postgresql
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - timelogger
+
+    redis:
+        image: redis:7.4.2-alpine
+        container_name: timelogger_redis
+        restart: always
+        command: [ "redis-server", "--appendonly", "yes" ]
+        ports:
+            - "${REDIS_PORT:-6380}:6379"
+        volumes:
+            - timelogger-redis-data:/data
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - timelogger
+
+volumes:
+    timelogger-pgsql-data:
+    timelogger-redis-data:
+    app-storage:
+
+networks:
+    timelogger:
+        driver: bridge
