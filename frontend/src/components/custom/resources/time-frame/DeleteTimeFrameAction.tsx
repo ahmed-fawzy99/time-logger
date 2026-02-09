@@ -8,12 +8,14 @@ import { useSWRConfig } from 'swr';
 
 type DeleteTimeFrameActionProps = PropsWithChildren & {
   timeFrameId: string;
-  redirect?: boolean;
+  projectId: string;
+  redirect?: string;
 };
 
 export default function DeleteTimeFrameAction({
   timeFrameId,
-  redirect = false,
+  projectId,
+  redirect = undefined,
   children,
 }: DeleteTimeFrameActionProps) {
   const { mutate } = useSWRConfig();
@@ -32,10 +34,16 @@ export default function DeleteTimeFrameAction({
       successToastMessage="Time Frame deleted successfully"
       onConfirm={async () => {
         await deleteTimeFrame({ id: timeFrameId });
-        mutate([SWR_CACHE_KEYS.TIME_FRAMES, tab, pageNumber, pageSize]);
+        mutate([
+          SWR_CACHE_KEYS.TIME_FRAMES,
+          tab,
+          pageNumber,
+          pageSize,
+          projectId,
+        ]);
         if (redirect) {
           router.navigate({
-            to: '/',
+            to: redirect,
           });
         }
       }}

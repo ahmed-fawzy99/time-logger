@@ -15,6 +15,8 @@ export default function TimeFrame({ timeFrame }: TimeFrameProps) {
       <TimeEntries
         timeFrameId={timeFrame.id}
         entries={timeFrame.includes?.timeEntries}
+        currency={timeFrame.attributes.currency}
+        hourlyRate={timeFrame.attributes.hourlyRate}
       />
     </div>
   );

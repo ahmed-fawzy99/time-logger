@@ -35,6 +35,7 @@ class PreferenceRequest extends FormRequest
             'additional_properties.invoiceName' => ['nullable', 'string', 'max:255'],
             'additional_properties.invoiceTitle' => ['nullable', 'string', 'max:255'],
             'additional_properties.invoiceAddress' => ['nullable', 'string', 'max:255'],
+            'additional_properties.invoicePrimaryColor' => ['nullable', 'string', 'regex:/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/'],
         ];
     }
 
@@ -52,6 +53,7 @@ class PreferenceRequest extends FormRequest
             'additional_properties.invoiceName' => 'invoice name',
             'additional_properties.invoiceTitle' => 'invoice title',
             'additional_properties.invoiceAddress' => 'invoice address',
+            'additional_properties.invoicePrimaryColor' => 'invoice color',
         ];
     }
 
@@ -67,6 +69,7 @@ class PreferenceRequest extends FormRequest
             'additional_properties.roundMethod.in' => 'The round method must be one of: up, down, or nearest.',
             'week_start.in' => 'The week start day must be a valid day of the week.',
             'currency.size' => 'The default currency must be a 3-letter currency code.',
+            'additional_properties.invoicePrimaryColor.regex' => 'The invoice color must be a valid hex color code.',
         ];
     }
 }

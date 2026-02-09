@@ -10,6 +10,11 @@ export const PREFERNCE_SCHEMA = z.object({
   invoiceName: z.string().max(255).nullable(),
   invoiceTitle: z.string().max(255).nullable(),
   invoiceAddress: z.string().max(255).nullable(),
+  invoicePrimaryColor: z.union([
+    z.string().regex(/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/, 'Invalid HEX color code'),
+    z.literal(''),
+    z.null(),
+  ]),
 });
 
 export type PreferenceForm = z.infer<typeof PREFERNCE_SCHEMA>;

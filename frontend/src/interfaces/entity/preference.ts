@@ -9,6 +9,7 @@ export interface PreferenceAttrs {
   invoiceName?: string;
   invoiceTitle?: string;
   invoiceAddress?: string;
+  invoicePrimaryColor?: string;
 
   createdAt: string;
   updatedAt: string;

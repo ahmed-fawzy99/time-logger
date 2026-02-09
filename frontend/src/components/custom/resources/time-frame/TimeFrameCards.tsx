@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { TimeFrameResource } from '@/interfaces/entity/time-frame';
 import dayjs from '@/lib/dayjs';
+import { usePreferences } from '@/providers/PreferencesProvider';
 import {
   IconCalendar,
   IconClock,
@@ -15,6 +16,7 @@ interface TimeFrameCardsProps {
 }
 
 export default function TimeFrameCards({ timeFrame }: TimeFrameCardsProps) {
+  const { preferences } = usePreferences();
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -38,11 +40,25 @@ export default function TimeFrameCards({ timeFrame }: TimeFrameCardsProps) {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="text-xs text-muted-foreground">Duration</div>
-              <div className="text-sm font-semibold mt-0.5">
-                {timeFrame.attributes.periodDurationInDays} days (
-                {timeFrame.attributes.daysTracked} tracked)
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <div className="text-xs text-muted-foreground">Duration</div>
+                <div className="text-sm font-semibold mt-0.5">
+                  {timeFrame.attributes.periodDurationInDays} days (
+                  {timeFrame.attributes.daysTracked} tracked)
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Rate</div>
+                <div className="text-sm font-semibold mt-0.5">
+                  {timeFrame.attributes.currency ??
+                    preferences?.attributes.currency ??
+                    ''} {' '}
+                  {timeFrame.attributes.hourlyRate ??
+                    preferences?.attributes.hourlyRate ??
+                    ''}
+                  /hr
+                </div>
               </div>
             </div>
           </CardContent>

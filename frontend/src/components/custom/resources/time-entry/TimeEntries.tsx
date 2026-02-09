@@ -9,11 +9,15 @@ import TimeEntry from './TimeEntry';
 interface TimeEntriesProps {
   timeFrameId: string;
   entries?: TimeEntryResource[];
+  currency?: string;
+  hourlyRate?: number;
 }
 
 export default function TimeEntries({
   timeFrameId,
   entries,
+  currency,
+  hourlyRate,
 }: TimeEntriesProps) {
   return (
     <Card>
@@ -43,7 +47,12 @@ export default function TimeEntries({
         {entries && entries.length > 0 ? (
           <div className="space-y-1">
             {entries.map((entry) => (
-              <TimeEntry key={entry.id} entry={entry} />
+              <TimeEntry
+                key={entry.id}
+                entry={entry}
+                currency={currency}
+                hourlyRate={hourlyRate}
+              />
             ))}
           </div>
         ) : (

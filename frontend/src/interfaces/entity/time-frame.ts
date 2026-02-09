@@ -22,6 +22,8 @@ export interface TimeFrameAttrs {
   averageDailyDurationInMinutes?: string;
   totalBillable?: string;
   invoiceUrl?: string;
+  hourlyRate?: number;
+  currency?: string;
   createdAt: string;
   updatedAt: string;
 }

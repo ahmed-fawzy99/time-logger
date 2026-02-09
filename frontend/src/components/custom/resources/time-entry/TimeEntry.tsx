@@ -13,11 +13,24 @@ import {
 import dayjs from 'dayjs';
 import DeleteTimeEntryAction from './DeleteTimeEntryAction';
 
-export default function TimeEntry({ entry }: { entry: TimeEntryResource }) {
-  const { preferences } = usePreferences();
+interface TimeEntryProps {
+  entry: TimeEntryResource;
+  currency?: string;
+  hourlyRate?: number;
+}
+
+export default function TimeEntry({
+  entry,
+  currency,
+  hourlyRate,
+}: TimeEntryProps) {
   const startTime = dayjs(entry.attributes.startTime);
   const endTime = dayjs(entry.attributes.endTime);
   const duration = dayjs.duration(endTime.diff(startTime));
+
+  const { preferences } = usePreferences();
+  const cur = currency ?? preferences?.attributes.currency ?? '';
+  const rate = hourlyRate ?? preferences?.attributes.hourlyRate;
 
   return (
     <div className="flex max-md:flex-col sm:items-start gap-2 sm:gap-4 py-3 px-4 rounded-lg hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
@@ -39,19 +52,15 @@ export default function TimeEntry({ entry }: { entry: TimeEntryResource }) {
               </span>
             ) : (
               Number(duration) > 0 &&
-              preferences?.attributes.hourlyRate &&
-              preferences?.attributes.currency && (
+              rate &&
+              cur && (
                 <Badge
                   variant="outline"
                   className="flex items-center gap-1 text-xs text-muted-foreground"
                 >
                   <IconCurrencyDollar className="size-4 text-green-600 dark:text-green-400" />
                   <span>
-                    {preferences.attributes.currency}{' '}
-                    {(
-                      duration.asHours() *
-                      Number(preferences.attributes.hourlyRate)
-                    ).toFixed(2)}
+                    {cur} {(duration.asHours() * Number(rate)).toFixed(2)}
                   </span>
                 </Badge>
               )

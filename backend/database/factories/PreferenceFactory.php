@@ -30,6 +30,7 @@ class PreferenceFactory extends Factory
                 'invoiceName' => $this->faker->company(),
                 'invoiceTitle' => $this->faker->title(),
                 'invoiceAddress' => $this->faker->address(),
+                'invoicePrimaryColor' => '#E05A2D',
             ],
         ];
     }

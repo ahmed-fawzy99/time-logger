@@ -33,6 +33,8 @@ class TimeFrame extends Model implements HasMedia
         'name',
         'status',
         'notes',
+        'hourly_rate',
+        'currency',
     ];
 
     protected $casts = [
@@ -150,16 +152,24 @@ class TimeFrame extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
-                $preferences = \Cache::tags([CacheTagEnum::PREFERENCE->value])
-                    ->remember('global_preferences',
-                        C::ONE_DAY,
-                        function () {
-                            return Preference::first();
-                        });
 
-                $amt = ($this->total_billable_seconds / 3600) * $preferences->hourly_rate;
+                $hourlyRate = $this->hourly_rate;
+                $currency = $this->currency;
 
-                return $preferences->currency.' '.number_format($amt, 2);
+                if (is_null($hourlyRate) || is_null($currency)) {
+                    $preferences = \Cache::tags([CacheTagEnum::PREFERENCE->value])
+                        ->remember('global_preferences',
+                            C::ONE_DAY,
+                            function () {
+                                return Preference::firstWhere('user_id', $this->user->id);
+                            });
+                    $hourlyRate = $preferences->hourly_rate;
+                    $currency = $preferences->currency;
+                }
+
+                $amt = ($this->total_billable_seconds / 3600) * $hourlyRate;
+
+                return $currency.' '.number_format($amt, 2);
             },
         );
     }

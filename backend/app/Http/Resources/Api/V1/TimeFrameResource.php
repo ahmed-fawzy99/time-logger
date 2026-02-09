@@ -28,6 +28,8 @@ class TimeFrameResource extends JsonResource
                 'status' => $this->status,
                 'notes' => $this->notes,
                 'invoiceUrl' => $this->invoice_url,
+                'hourlyRate' => $this->hourly_rate,
+                'currency' => $this->currency,
                 'createdAt' => $this->created_at,
                 'updatedAt' => $this->updated_at,
 

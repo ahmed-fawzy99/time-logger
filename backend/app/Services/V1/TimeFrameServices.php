@@ -101,14 +101,13 @@ class TimeFrameServices
 
     public function getInvoice(string $timeFrameId): string
     {
-        $q = TimeFrame::with([
+        $timeFrame = TimeFrame::with([
             'timeEntries' => fn ($q) => $q->billable()->finalized()->reorder('work_day', 'asc')->orderBy('start_time', 'asc'),
             'project',
             'user.preferences',
             'media',
-        ]);
-
-        $timeFrame = $q->findOrFail($timeFrameId);
+        ])
+            ->findOrFail($timeFrameId);
 
         return $this->generateInvoice($timeFrame)->getFullUrl();
 
@@ -119,9 +118,14 @@ class TimeFrameServices
      */
     public function generateInvoice(TimeFrame $timeFrame): Media
     {
+        $hourlyRate = $timeFrame->hourly_rate;
+        $currency = $timeFrame->currency;
         $preferences = $timeFrame->user->preferences;
-        $hourlyRate = $preferences->hourly_rate;
-        $currency = $preferences->currency;
+
+        if (is_null($hourlyRate) || is_null($currency)) {
+            $hourlyRate = $preferences->hourly_rate;
+            $currency = $preferences->currency;
+        }
         $additionalProperties = $preferences->additional_properties ?? [];
 
         $totalSeconds = 0;
@@ -167,6 +171,8 @@ class TimeFrameServices
         $media = $timeFrame->addMedia($tempPath)
             ->usingFileName($fileName)
             ->toMediaCollection(MediaCollectionEnum::TIME_FRAME_INVOICE->value);
+
+        \Cache::tags([CacheTagEnum::TIME_FRAME->value])->flush();
 
         return $media;
     }

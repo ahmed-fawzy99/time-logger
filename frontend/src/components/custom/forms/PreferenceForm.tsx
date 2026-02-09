@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,6 +55,7 @@ export default function PreferenceForm({
       invoiceName: curPreferences.attributes.invoiceName,
       invoiceTitle: curPreferences.attributes.invoiceTitle,
       invoiceAddress: curPreferences.attributes.invoiceAddress,
+      invoicePrimaryColor: curPreferences.attributes.invoicePrimaryColor,
     },
   });
 
@@ -235,6 +237,36 @@ export default function PreferenceForm({
                 {serverErrors.invoiceAddress && (
                   <p className="text-destructive text-sm">
                     {serverErrors.invoiceAddress.join(', ')}
+                  </p>
+                )}
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="invoicePrimaryColor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Invoice Primary Color (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="#000000"
+                    {...field}
+                    value={field.value ?? ''}
+                  />
+                </FormControl>
+                <div className="flex-inline items-center text-muted-foreground text-sm">
+                  Enter a hex code for the primary color used in your invoices.
+                  This will override the default color scheme{' '}
+                  <div className="w-3 h-3 bg-primary inline-block me-1 rounded" />
+                  <span className="text-primary">(#E05A2D)</span>.
+                </div>
+                <FormDescription></FormDescription>
+                <FormMessage />
+                {serverErrors.invoicePrimaryColor && (
+                  <p className="text-destructive text-sm">
+                    {serverErrors.invoicePrimaryColor.join(', ')}
                   </p>
                 )}
               </FormItem>

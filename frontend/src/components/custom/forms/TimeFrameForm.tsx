@@ -39,6 +39,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { DEFAULT_API_PAGE_SIZE, SWR_CACHE_KEYS } from '@/config';
 import useDismissModal from '@/hooks/use-dismiss-modal';
 import { TIMEFRAME_STATUSES } from '@/lib/data-access/form-constants';
+import { usePreferences } from '@/providers/PreferencesProvider';
 import { cn } from '@/utils/cn-utils';
 import { parseError } from '@/utils/error-handling';
 import { useNavigate } from '@tanstack/react-router';
@@ -69,6 +70,7 @@ export default function TimeFrameForm({
   const [pageSize] = useQueryState('pageSize', {
     defaultValue: DEFAULT_API_PAGE_SIZE.toString(),
   });
+  const { preferences } = usePreferences();
   const form = useForm<TimeFrameFormType>({
     resolver: zodResolver(TIMEFRAME_SCHEMA),
     defaultValues: {
@@ -83,6 +85,14 @@ export default function TimeFrameForm({
       // : undefined,
       status: timeFrame?.attributes.status ?? 'in_progress',
       notes: timeFrame?.attributes.notes ?? '',
+      currency:
+        timeFrame?.attributes.currency ??
+        preferences?.attributes.currency ??
+        '',
+      hourly_rate:
+        timeFrame?.attributes.hourlyRate ??
+        preferences?.attributes.hourlyRate ??
+        undefined,
     },
   });
 
@@ -333,6 +343,60 @@ export default function TimeFrameForm({
             </FormItem>
           )}
         />
+
+        <div className="grid grid-cols-2 gap-2 py-4 px-2 bg-accent rounded-lg">
+          <FormField
+            control={form.control}
+            name="currency"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Currency</FormLabel>
+                <FormControl>
+                  <Input placeholder="USD" {...field} />
+                </FormControl>
+                <FormMessage />
+                {serverErrors.currency && (
+                  <p className="text-destructive text-sm">
+                    {serverErrors.currency.join(', ')}
+                  </p>
+                )}
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="hourly_rate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Hourly Rate</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="50.00"
+                    {...field}
+                    value={field.value ?? ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === '' ? undefined : Number(value));
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+                {serverErrors.hourlyRate && (
+                  <p className="text-destructive text-sm">
+                    {serverErrors.hourlyRate.join(', ')}
+                  </p>
+                )}
+              </FormItem>
+            )}
+          />
+          <p className="text-sm text-muted-foreground col-span-2">
+            You can override your default rate for this time frame by entering a
+            different value here.
+          </p>
+        </div>
 
         <FormField
           control={form.control}

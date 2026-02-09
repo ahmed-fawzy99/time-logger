@@ -169,7 +169,7 @@ const columns: ColumnDef<TimeFrameResource>[] = [
                   Edit
                 </DropdownMenuItem>
               </TimeFrameDialog>
-              <DeleteTimeFrameAction timeFrameId={row.original.id}>
+              <DeleteTimeFrameAction timeFrameId={row.original.id} projectId={row.original.relationships.project.data.id}>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onSelect={(e) => e.preventDefault()}

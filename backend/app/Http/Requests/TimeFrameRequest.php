@@ -32,6 +32,9 @@ class TimeFrameRequest extends FormRequest
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'status' => ['sometimes', 'required', Rule::enum(TimeFrameStatusEnum::class)],
             'notes' => ['nullable', 'string'],
+
+            'hourly_rate' => ['required', 'numeric'],
+            'currency' => ['required', 'string', 'size:3'],
         ];
     }
 }

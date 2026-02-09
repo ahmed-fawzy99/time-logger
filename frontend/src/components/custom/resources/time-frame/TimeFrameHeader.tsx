@@ -35,7 +35,11 @@ export default function TimeFrameHeader({ timeFrame }: TimeFrameHeaderProps) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <DeleteTimeFrameAction timeFrameId={timeFrame.id} redirect>
+          <DeleteTimeFrameAction
+            timeFrameId={timeFrame.id}
+            projectId={timeFrame.relationships.project.data.id}
+            redirect={`/projects/${timeFrame.includes?.project?.attributes.slug ?? timeFrame.relationships.project.data.id}`}
+          >
             <Button variant="destructive">
               <IconTrash />
               Delete
