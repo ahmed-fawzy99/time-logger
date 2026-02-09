@@ -4,7 +4,16 @@ set -e
 if [ ! -f /app/.env ]; then
     echo "Creating .env file from .env.example..."
     cp /app/.env.example /app/.env
+
+    if [ -z "$APP_KEY" ] && ! grep -q "^APP_KEY=base64:" /app/.env; then
+        echo "Generating application key..."
+        php artisan key:generate --force
+    fi
+
+    # Export the generated key so it overrides the empty env var from Docker Compose env_file
+    export APP_KEY=$(grep "^APP_KEY=" /app/.env | cut -d'=' -f2-)
 fi
+
 
 echo "Caching configuration..."
 php artisan optimize

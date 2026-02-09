@@ -39,10 +39,9 @@ docker compose -f backend/compose.yaml up -d --build && \
 docker compose -f frontend/compose.yaml up -d --build
 ```
 
-First time configurations (It may take a few seconds for the services to start up after running the above command.):
+First time initialization (It may take a few seconds for the services to start up after running the above command.):
 
 ```bash
-docker compose -f backend/compose.yaml exec -it app php artisan key:generate
 docker compose -f backend/compose.yaml exec -it app php artisan db:seed --force
 ```
 
@@ -122,6 +121,7 @@ Sample PDF Invoice Link: https://pub-2d4798b44c2c47d1adecc6c62bf47f38.r2.dev/git
 - [ ] Add support for more advanced invoice customization
 
 Fancy stuff that can be added in the future:
+
 - [ ] Add analytics and reporting features to help users track their time and productivity
 - [ ] Add support for integrating with calendar applications (e.g. Google Calendar) to automatically log time based on calendar events
 - [ ] Add support for integrating with project management tools (e.g. Trello, Asana) to automatically log time based on tasks and projects
@@ -131,8 +131,8 @@ Fancy stuff that can be added in the future:
 
 Contributions are welcome! Please open an issue or submit a pull request with your changes or your feature request.
 
-
 # SUPPORT THE PROJECT
+
 If you find this project useful and want to support its development, you can star it, share it with whoever you think might benefit from it, or even contribute to the project by submitting a pull request with new features, bug fixes, or improvements. Your support is greatly appreciated!
 
 # License
