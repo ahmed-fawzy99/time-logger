@@ -7,7 +7,7 @@ services:
         container_name: timelogger_app
         restart: unless-stopped
         ports:
-            - "${APP_PORT:-8000}:8000"
+            - "${OCTANE_PORT:-8000}:8000"
         env_file: .env
         environment:
             DB_HOST: postgres
