@@ -53,7 +53,7 @@ export default function TimeFrameCards({ timeFrame }: TimeFrameCardsProps) {
                 <div className="text-sm font-semibold mt-0.5">
                   {timeFrame.attributes.currency ??
                     preferences?.attributes.currency ??
-                    ''} {' '}
+                    ''}{' '}
                   {timeFrame.attributes.hourlyRate ??
                     preferences?.attributes.hourlyRate ??
                     ''}
@@ -76,14 +76,10 @@ export default function TimeFrameCards({ timeFrame }: TimeFrameCardsProps) {
               </div>
               <div className="text-lg font-semibold mt-0.5">
                 {timeFrame.attributes.totalRecordedDurationInMinutes
-                  ? dayjs
-                      .duration(
-                        Number(
-                          timeFrame.attributes.totalRecordedDurationInMinutes,
-                        ),
-                        'minutes',
-                      )
-                      .format('H [hrs] m [min]')
+                  ? (() => {
+                      const d = dayjs.duration(Number(timeFrame.attributes.totalRecordedDurationInMinutes), 'minutes');
+                      return `${Math.floor(d.asHours())} hrs ${d.minutes()} min`;
+                    })()
                   : '-'}
               </div>
             </div>
