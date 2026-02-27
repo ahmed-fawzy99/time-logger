@@ -91,12 +91,13 @@ const columns: ColumnDef<TimeFrameResource>[] = [
     header: 'Total Recorded Duration',
     cell: ({ row }) => {
       return row.original.attributes.totalRecordedDurationInMinutes ? (
-        dayjs
-          .duration(
+        (() => {
+          const d = dayjs.duration(
             Number(row.original.attributes.totalRecordedDurationInMinutes),
             'minutes',
-          )
-          .format('H [hrs] m [min]')
+          );
+          return `${Math.floor(d.asHours())} hrs ${d.minutes()} min`;
+        })()
       ) : (
         <span className="text-muted-foreground">0 hrs 0 min</span>
       );
@@ -169,7 +170,10 @@ const columns: ColumnDef<TimeFrameResource>[] = [
                   Edit
                 </DropdownMenuItem>
               </TimeFrameDialog>
-              <DeleteTimeFrameAction timeFrameId={row.original.id} projectId={row.original.relationships.project.data.id}>
+              <DeleteTimeFrameAction
+                timeFrameId={row.original.id}
+                projectId={row.original.relationships.project.data.id}
+              >
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onSelect={(e) => e.preventDefault()}
